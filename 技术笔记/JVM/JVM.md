@@ -256,7 +256,6 @@ java堆：-Xms -Xmx
 JDK1.8后，使用Meta Space替代了Perm Space，MetaSpace大小默认没有限制，一般根据系统内存的大小。JVM会动态改变此值。
 -XX:MetaspaceSize：分配给类元数据空间的初始值；
 -XX:MaxMetaspaceSize：分配给类元数据空间的最大值，超过此值会触发FullGC，此值默认没有限制，取决于系统内存的大小。JVM会动态地改变此值。
-
 ```
 
 # 类加载机制篇
@@ -370,7 +369,7 @@ JDK1.8后，使用Meta Space替代了Perm Space，MetaSpace大小默认没有限
 有序性：通过内存屏障指令实现；
 ```
 
-### ！！！注意：需要加锁来实现原子性；
+### ！！！注意：volatile需要加锁来实现原子性；
 
 ## 6、可见性、有序性、原子性？
 
