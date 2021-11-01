@@ -1,4 +1,6 @@
-## 1、什么是Redis
+# Redis入门-数据结构
+
+## 1、什么是Redis？
 
 Remote Dictionary Server，使用ANSI C语言编写，基于内存（可持久化）的键值对（key-value）字典结构数据存储系统；
 
@@ -10,24 +12,24 @@ Redis支持多个数据库，默认数量16个（从0开始，使用SELECT命令
 
 ##### 主要：
 
-```
-* 多数据类型：支持string，list，set，zset，hash等数据结构的值存储；
-* 数据持久化： 使用AOF，RDB进行数据持久化（磁盘）；
-* 发布/订阅： 
-* 主从复制（数据备份）： 支持master-slave模式的数据备份。
-* 单线程 + 多路I/O复用：
+```properties
+* 多数据类型: 支持string，list，set，zset，hash等数据结构的值存储；
+* 数据持久化: 使用AOF，RDB进行数据持久化（磁盘）；
+* 发布/订阅: 
+* 主从复制（数据备份）: 支持master-slave模式的数据备份。
+* 单线程 + 多路I/O复用:
 ```
 
 ##### 其他：
 
-```
-默认端口：6379；
-多数据库：0-15，共16个数据库，使用select 0～15切换；
-原子性：Redis的所有操作都是原子性的，同时Redis还支持对几个操作全并后的原子性执行；
+```properties
+默认端口: 6379；
+多数据库: 0-15，共16个数据库，使用select 0～15切换；
+原子性: Redis的所有操作都是原子性的，同时Redis还支持对几个操作全并后的原子性执行；
 
-性能极高：Redis能读的速度是110000次/s,写的速度是81000次/s；
-丰富的数据类型：Redis支持二进制案例的 Strings, Lists, Hashes, Sets 及 Ordered Sets 数据类型操作；
-丰富的特性：Redis还支持发布订阅（publish/subscribe）、通知、 key过期等等特性。
+性能极高: Redis能读的速度是110000次/s,写的速度是81000次/s；
+丰富的数据类型: Redis支持二进制案例的 Strings, Lists, Hashes, Sets 及 Ordered Sets 数据类型操作；
+丰富的特性: Redis还支持发布订阅（publish/subscribe）、通知、 key过期等等特性。
 ```
 
 ## 3、Redis数据类型（value值类型）

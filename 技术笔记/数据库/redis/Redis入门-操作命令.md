@@ -1,3 +1,5 @@
+# Redis入门-操作命令
+
 ## 操作库
 
 ````properties
@@ -38,7 +40,7 @@ pttl <key>: 返回key 的剩余的过期时间（毫秒）；
 set <key> <value>:   设置key及其值；
 get <key>:   获取key的值；
 getset <key> <value>:   以新换旧，将key的值设为value，并返回key的旧值(old value)；
-setnx <key> <value>:   只有在key不存在时设置key的值；
+* setnx <key> <value>:   只有在key不存在时设置key的值；---分布式锁的实现命令
 stelen <key>:   返回key所储存的字符串值的长度；
 append <key> <value>:   追加值，key存在追加，不存在新增；
 

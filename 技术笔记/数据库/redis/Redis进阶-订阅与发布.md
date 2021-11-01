@@ -1,4 +1,4 @@
-# 订阅与发布
+# Redis进阶-订阅与发布
 
 ##### Redis 发布订阅(pub/sub)是一种消息通信模式：发送者(pub)发送消息，订阅者(sub)接收消息。
 
@@ -6,13 +6,13 @@ Redis 通过 **publish**（发布）、 **subscribe**（订阅）等命令实现
 
 发布/订阅提供两种信息机制， 分别是 **订阅/发布到频道** 和 **订阅/发布到模式**。
 
-## 1、订阅/发布到频道（channel）
+## 一、订阅/发布到频道（channel）
 
 Redis 的 **subscribe** 命令可以让客户端（client）订阅任意数量的频道（channel），而且频道（channel）可以被多个客户端（client）订阅；
 
 当有新信息发送到被订阅的频道（channel）时， 信息就会被发送给所有订阅指定频道的客户端（client）。
 
-### 1.1、订阅频道 （subscribe）
+### 订阅频道 （subscribe）
 
 * ##### 使用
 
@@ -51,7 +51,7 @@ def SUBSCRIBE(client, channels):
 
 只要取出某个键的值， 就可以得到所有订阅该频道的客户端的信息。
 
-### 1.2、发送信息 （publish）
+### 发送信息 （publish）
 
 * ##### 使用
 
@@ -76,17 +76,17 @@ def PUBLISH(channel, message):
         send_message(client, message)
 ```
 
-### 1.3、退订频道（unsubscribe）
+### 退订频道（unsubscribe）
 
 使用 **unsubscribe **命令可以退订指定的频道；
 
 这个命令执行的是订阅的反操作： 它从 `pubsub_channels` 字典的给定频道（键）中， 删除关于当前客户端的信息， 这样被退订频道的信息就不会再发送给这个客户端。
 
-## 2、订阅/发布到模式（pattern）
+## 二、订阅/发布到模式（pattern）
 
 当使用**publish**命令发送信息到某个频道（channel）时， 不仅所有订阅该频道的客户端会收到信息， 如果有某个/某些模式（pattern）和这个频道（channel）匹配的话， 那么所有订阅这个/这些模式的客户端也同样会收到信息。
 
-### 2.1、订阅模式（psubscribe）
+### 订阅模式（psubscribe）
 
 * ##### 使用
 
@@ -124,7 +124,7 @@ typedef struct pubsubPattern {
 
 通过遍历整个 `pubsub_patterns` 链表，程序可以检查所有正在被订阅的模式，以及订阅这些模式的客户端。
 
-### 2.2、发送消息（publish）
+### 发送消息（publish）
 
 发送信息到模式的工作也是由 publish 命令进行的；
 
@@ -144,7 +144,7 @@ def PUBLISH(channel, message):
             send_message(client, message)
 ```
 
-### 2.3 退订模式（punsubscribe）
+### 退订模式（punsubscribe）
 
 使用 punsubscribe 命令可以退订指定的模式；
 
