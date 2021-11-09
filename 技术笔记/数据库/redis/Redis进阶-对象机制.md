@@ -38,7 +38,7 @@ typedef struct redisObject {
     int refcount;
     // 指向底层数据结构实例
     void *ptr;
-} robj;
+} redisObject;
 ```
 
 **其中type、encoding和ptr是最重要的三个属性**。
