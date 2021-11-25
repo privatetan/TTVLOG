@@ -64,7 +64,7 @@ Apollo 内部分为七个模块：四个核心模块，三个辅助模块；
 
 ###### 步骤
 
-1. 在 Apollo 控制台进行配置修改并发布后，对应的 client 端拉取到更新后，会调用到 AutoUpdateConfigChangeListener#onChange方法；
+1. 在 Apollo 控制台进行配置修改并发布后，对应的 client 端拉取到更新后，会调用到 AutoUpdateConfigChangeListener.onChange()方法；
 
 2. 在调用 onChange 会收到对应的修改的配置信息 ConfigChangeEvent， 其中包含改动的 key 和 value, 则改动流程如下：
 
