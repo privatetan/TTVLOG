@@ -447,5 +447,11 @@
 
 
 
+## Arrays.asList的坑
 
+1. **不能直接使用 Arrays.asList 来转换基本类型数组**；
+2. **Arrays.asList 返回的 List 不支持增删操作**；
+3. **对原始数组的修改会直接影响得到的list**。
+
+**[参考链接](https://www.cnblogs.com/Brake/p/12731888.html)**
 
