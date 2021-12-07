@@ -9,11 +9,11 @@ Spring cloud Config配置中心，使用Git/Svn等版本控制器来存放和管
 ## Spring Cloud Config核心组件
 
 - #### Config Server
-
+  
   缓存配置文件的服务器(用于缓存 git 服务器上的配置文件（服务名称-环境.properties）信息)；
 
 - #### Config Client
-
+  
   读取 ConfigServer 配置文件信息；
 
 ## Spring Cloud Config实现原理
@@ -29,9 +29,9 @@ Spring cloud Config配置中心，使用Git/Svn等版本控制器来存放和管
 - 默认情况下不能实时刷新配置文件信息,需要重启服务器才能刷新配置文件,这样不是很方便
 
 - ###### SpringCloud Config 分布式配置中心支持手动刷新和自动刷新:
-
+  
   - **手动刷新:** 需要人工调用接口，读取最新配置文件信息 -- SpringBoot Actuator监控中心
-
+    
     ```
       SpringBoot Actuator监控中心
       1.引入actuator依赖spring-boot-starter-actuator
@@ -40,9 +40,9 @@ Spring cloud Config配置中心，使用Git/Svn等版本控制器来存放和管
       3.启动运行configClient
       4.在需要刷新的controller类中的bean当标注@RefreshScope注解使actuator刷新生效
     ```
-
+  
   - **自动刷新:** 消息总线进行实时通知--SpringCloudBus
-
+    
     ```
     SpringCloudBus 通过一个轻量级消息代理连接分布式系统的节点（有点像消息队列那种）。
     
@@ -50,6 +50,3 @@ Spring cloud Config配置中心，使用Git/Svn等版本控制器来存放和管
     
     SpringCloudBus提供了通过post方法访问的endpoint/bus/refresh（spring boot 有很多监控的endpoint，比如/health），这个接口通常由git的钩子功能（监听触发）调用，用以通知各个SpringCloudConfig的客户端去服务端更新配置。
     ```
-
-    
-
