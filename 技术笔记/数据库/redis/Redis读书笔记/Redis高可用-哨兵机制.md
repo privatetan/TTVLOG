@@ -36,11 +36,11 @@ sentinel本质上是一个运行在特殊模式下的Redis服务器，步骤与�
 将一部分普通redis服务器使用的代码替换成Sentinel专用代码：
 
 - 将端口6379改成26379：
-
+  
   Sentinel使用sentinel.c/REDIS_SENTINEL_PORT的值替换掉原来redis.h/REDIS_SERVERPORT服务器端口。
 
 - 替换命令表：
-
+  
   Sentinel使用sentinel.c/sentinelcmds替换原来的redis.c/redisCommandTable命令表;
 
 ##### 3. 初始化Sentinel状态
@@ -53,21 +53,21 @@ sentinel.c/sentinelState结构如下：
 struct sentinelState{
   //当前纪元，用于实现故障转移
   unit64_t current_epoch;
-  
+
   //保存了所有被这个sentinel监视的主服务器
   //字典的键是主服务器的名字
   //字典的值时一个指向sentinelRedisInstance结构的指针
   dict *masters;
-  
+
   //是否进入TILT模式
   int tilt；
-    
+
   //目前正在执行的脚本数量
   int running_script;
-  
+
   //进入TILT模式的时间
   mstime_t previous_time;
-  
+
   //一个FOFO队列，包含所有需要执行的用户脚本
   list *scripts_queue;
 }sentinelState;
@@ -204,33 +204,33 @@ Sentinel之间不会创建订阅连接。
 #### 命令询问流程
 
 - ##### 发送SENTINEL is-master-down-by-addr 命令
-
+  
   ```c
   SENTINEL is-master-down-by-addr <ip> <port> <currnt_epoch> <runid>
   ```
-
+  
   Sentinel使用该命令询问其他Sentinel是否同意主服务器已下线；
-
+  
   ###### 值得注意：
-
-  ````
+  
+  ```
   runid，可以是符号“\*”或者是目标Sentinel的局部领头Sentinel的运行ID，“*”代表命令仅用于检测主服务器的下线状态，而Sentinel的运行id则用于选举领头Sentinel。
-  ````
+  ```
 
 - ##### 接收SENTINEL is-master-down-by-addr 命令
-
+  
   当一个Sentinel（目标Sentinel）接收到另一个Sentinel（源Sentinel）发来的SENTINEL 命令，目标Sentinel会取出并分析命令请求中的参数，判断参数所指向的主服务器是否已下线，并返回包含三个参数的Multi Bulk回复给源Sentinel；
-
+  
   三个参数：
-
-  |     参数     |                             意义                             |
-  | :----------: | :----------------------------------------------------------: |
-  |  down_state  |  返回目录Sentinel对主服务器的检查结果，1：已下线，0：未下线  |
+  
+  | 参数           | 意义                                                                                         |
+  |:------------:|:------------------------------------------------------------------------------------------:|
+  | down_state   | 返回目录Sentinel对主服务器的检查结果，1：已下线，0：未下线                                                         |
   | leader_runid | 可以是符号“\*”或者是目标Sentinel的局部领头Sentinel的运行ID，“*”代表命令仅用于检测主服务器的下线状态，Sentinel运行ID用于选举领头Sentinel； |
-  | leader_epoch | 目标Sentinel的局部领头Sentinel的配置纪元，用于选举领头Sentinel，且仅在leader_runid不为“\*”符号有效。 |
+  | leader_epoch | 目标Sentinel的局部领头Sentinel的配置纪元，用于选举领头Sentinel，且仅在leader_runid不为“\*”符号有效。                     |
 
 - ##### 判断客观下线
-
+  
   根据源Sentinel的命令回复，目标Sentinel统计同意主服务器下线的数量，当数量达到配置指定的客观下线条件数量时，Sentinel会将主服务器实例结构flags属性的SRI_O_DOWN标识打开，表示主服务器已经进入客观下线状态。
 
 Question：Sentinel实例下线如何处理？
@@ -260,19 +260,19 @@ Question：Sentinel实例下线如何处理？
 故障转移步骤：
 
 - ### 选出新的主服务器
-
+  
   挑选出一个状态良好，数据完整的从服务器，然后向这个服务器发送`SLAVEOF no one`命令将这个从服务器转化为主服务器。
-
+  
   在发送SLAVEOF no one命令后，领头Sentinel会以1s/次的频率，向被升级的从服务器发送INFO命令，并观察命令回复中的角色信息，当被升级服务器的角色从原来的slave变为master，领头Sentinel就知道被选中的从服务器已经升级为主服务器。
-
+  
   ###### Question：如何挑选新的主服务器？
 
 - ### 修改从服务器的复制目标
-
+  
   领头Sentinel已下线的主服务器下的从服务器发送SLAVEOF命令，让他们去复制新的主服务器。
 
 - ### 旧的主服务器变为从服务器
-
+  
   最后一步就是将已经下线的主服务器设置为新的主服务器的从服务器。
 
 ## 八、Sentinel重点知识点

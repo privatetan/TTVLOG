@@ -47,8 +47,6 @@ sudo mysql_secure_installation
    ```
    
    在bind-adress = 127.0.0.1前加上#号；
-   
-   
 
 4. ###### 重启mysql服务
    

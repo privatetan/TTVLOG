@@ -44,9 +44,9 @@ typedef struct redisObject {
 **其中type、encoding和ptr是最重要的三个属性**。
 
 * **type**
-
+  
   type记录了对象所保存的值的类型，它的值可能是以下**常量**中的一个：
-
+  
   ```c
   /*
   * 对象类型
@@ -59,9 +59,9 @@ typedef struct redisObject {
   ```
 
 * **encoding**
-
+  
   encoding记录了对象所保存的值的编码，它的值可能是以下常量中的一个：
-
+  
   ```c
   /*
   * 对象编码
@@ -80,17 +80,17 @@ typedef struct redisObject {
   ```
 
 * **ptr**
-
+  
   **ptr是一个指针，指向实际保存值的数据结构**，这个数据结构由type和encoding属性决定。
-
+  
   例如， 如果一个redisObject 的type 属性为`OBJ_LIST` ， encoding 属性为`OBJ_ENCODING_QUICKLIST` ，那么这个对象就是一个Redis 列表（List)，它的值保存在一个QuickList的数据结构内，而ptr 指针就指向quicklist的对象；
 
 * **lru**
-
+  
   lru记录了对象最后一次被命令程序访问的时间。
-
+  
   **空转时长**：当前时间减去键的值对象的lru时间，就是该键的空转时长。Object idletime命令可以打印出给定键的空转时长。
-
+  
   如果服务器打开了maxmemory选项，并且服务器用于回收内存的算法为volatile-lru或者allkeys-lru，那么当服务器占用的内存数超过了maxmemory选项所设置的上限值时，空转时长较高的那部分键会优先被服务器释放，从而**回收内存**。
 
 ## 命令的类型检查和多态

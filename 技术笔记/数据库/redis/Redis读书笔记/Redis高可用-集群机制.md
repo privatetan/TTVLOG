@@ -95,11 +95,11 @@ typedef struct clusterLink {
 ```
 
 - ###### redisClient结构与clusterLink的异同之处
-
+  
   - 相同：两者都有自己的套接字描述符和输入、输出缓冲区；
   - 不同：redisClient结构中的套接字和缓冲区是作用于连接客户端，而clusterLink结构中的套接字和缓冲区是作用于连接点的。
 
-##### clusterState结构  
+##### clusterState结构
 
 每个节点都保存着一个用于记录当前节点所在集群的状态等信息的clusterState结构；
 
@@ -159,25 +159,25 @@ clusterNode结构的slots属性和numslot属性记录了节点负责处理哪些
 
 ```c
 typedef struct clusterNode {
-     
+
     unsigned char slots[CLUSTER_SLOTS/8]; 
-  
+
     sds slots_info; 
-    
+
     int numslots;  
 } clusterNode;
 ```
 
 - ###### slots属性
-
+  
   slots属性是一个二进制位数组，长度为16384/8 = 2048字节，共包含16384个二进制位；
-
+  
   0为起始索引，16383为终止索引，根据索引位上的二进制值来判单是（1）否（0）处理槽；
-
+  
   在slots数组中，检查槽处理和处理槽的复杂度都是O(1)：基于索引。
 
 - ###### numslots属性
-
+  
   记录负责处理槽的数量，即slots数组中值为1的二进制位数量。
 
 ### 传播节点的槽指派信息
@@ -194,16 +194,16 @@ clusterState结构slots数组记录了集群中所有16384个槽的指派信息�
 
 ```c
 typedef struct clusterState {
-  
+
   clusterNode *slots[16384];
-  
+
 }clusterState;
 ```
 
 - ###### slots属性
-
+  
   slots数组包含了16384个元素，每个元素都是只想clusterNode结构的指针：
-
+  
   - 如果slots[i]指针指向null，表示槽i尚未被指派；
   - 如果slots[i]指针指向一个clusterNode结构，表示槽i已经指派给了clusterNode结构所代表节点。
 
@@ -230,7 +230,7 @@ def CLUSTER_ADDSLOTS(*all_input_slots):
        if clusterState.slots[i] != NULL:
          reply_error()
          return
-         
+
    //如果都是未指派槽，再次遍历
    for i in all_input_slots:
        //将slots[i]的指针指向代表当前节点的clusterNode结构
@@ -293,13 +293,13 @@ MOVED <slot> <ip>:<port>
 
 slots_to_keys结构：
 
-````c
+```c
 typedef struct clusterState{
    //...
    zskiplist *slots_to_keys
    //...
 }clusterState;
-````
+```
 
 slots_to_keys跳跃表的每个节点的分值（Score）都是一个槽号，每个节点的成员（member）都是一个数据库键：
 
@@ -325,29 +325,29 @@ slots_to_keys跳跃表的每个节点的分值（Score）都是一个槽号，�
 redis-trib对单槽slot执行重新分片操作步骤：
 
 1. ###### 就绪目标节点
-
+   
    redis-trib对目标节点发送cluster setslot <slot> importing <sorceid>命令，让目标节点准备好从源节点导入（import）属于槽slot的键值对；
 
 2. ###### 就绪源节点
-
+   
    redis-trib对源节点发送cluster setslot <slot> migrating <targetid>命令，让源节点住呢比好讲述与slot槽的键值对迁移（migrate）至目标节点；
 
 3. ###### 获取源节点键名
-
+   
    redis-trib对源节点发送cluster getkeysinslot <slot> <count>命令，获得最多count个属于槽slot的键值对的键名；
 
 4. ###### 迁移键
-
+   
    对于步骤3中获得的每一个键名，redis-trib都要向源节点发送一个migate <tagetIp> <targetPort> <keyName> 0 <timeour>命令，将被选中的键原子地从源节点迁移至目标节点；
 
 5. ###### 重复3-4步骤
-
+   
    重复3、4步骤，直至源节点保存的所有槽slot的键值对都被迁移至目标节点位置；
 
 6. ###### 槽slot指派
-
+   
    redis-trib向集群中的任意一个节点发送cluster setslot <slot> node <tagetId>命令，将槽slot指派给目标节点；
-
+   
    这一指派信息会通过消息发送至整个集群，最终集群中的所有节点都会知晓槽slot已经指派给了目标节点。
 
 ## 六、ASK错误
@@ -428,11 +428,11 @@ def ASKING():
 ### ASK错误与MOVED错误异同
 
 - ###### 相同
-
+  
   ASK错误和MOVED错误都是会导致客户端转向；
 
 - ###### 不同
-
+  
   - MOVED错误代表槽的负责权已经从一个节点转移到另一个节点；
   - ASK错误只是两个节点在进行槽迁移时过程中的临时措施。
 
