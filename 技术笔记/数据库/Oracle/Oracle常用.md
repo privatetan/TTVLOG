@@ -79,7 +79,25 @@ values (t2.column1,t2.column2)
 ### mysql
 
 ```sql
-insert into emailverify  (1, 2) values (#{1},#{2}) on duplicate key update 2= #{2}
+insert into emailverify  (1, 2) 
+values (#{1},#{2}) 
+on duplicate key update 2 = #{2}
 ```
 
+## 六、存储过程
+
+```sql
+create or replace procedure proc_name as
+begin 
+    for temp in 
+    (select column1,column2,column3 from table_name where column2 = #{abc} )
+    loop 
+      insert table_name2 (column1,column2) values (temp.column1,temp.column2);
+     commit;
+    end loop;
+end proc_name;
+/
+execute proc_name;
+commit;
+```
 
