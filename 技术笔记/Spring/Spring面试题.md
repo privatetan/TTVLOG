@@ -14,13 +14,64 @@
 
 依赖倒置
 
-### 3、BeanFactory的作用
+### 3、BeanFactory
 
+BeanFactory，Bean工厂，是一种Spring容器，用来创建Bean、管理Bean、获取Bean；
 
+BeanFactory核心子接口和实现类：
 
-### 4、BeanDefinition的作用
+- ListableBeanFactory：
 
+- ConfigurableBeanFactory：
 
+- AutowireCapableBeanFactory：
+
+- AbstractBeanFactory：
+
+- **DefaultListableBeanFactory：重要的**
+
+  支持单例Bean、支持Bean别名、支持父子BeanFactory、支持Bean类型转化、支持Bean后置处理、支持FactoryBean、支持自动装配等。
+
+### 4、BeanDefinition
+
+BeanDefinition，表示Bean的定义，Spring根据BeanDefinition来创建Bean对象；
+
+BeanDefinition中重要的属性：
+
+- beanClass：表示bean的类型，如UserService.class，Spring创建Bean时根据该属性得到实例化对象；
+- scope：表示Bean的作用域，如：singleton、prototype、request、session、application；
+- isLazy：表示Bean是否需要懒加载，懒加载的单例（singleton）bean，会在第一次getBean时候生成bean，原型（prototype）bean的isLazy属性不生效；
+- dependsOn：表示bean的依赖bean，在实例化bean时，需先实例化依赖bean；
+- primary：表示bean为主bean，Spring中一个类型可以有多个bean对象，依赖注入时，一个类型下有多个bean时，优先注入主bean；
+- initMethodName：表示bean的初始化方法，bean在初始化时会调用该方法；
+
+@Component、 @Bean、 \<bean/> 都会解析成BeanDefinition对象。
+
+### BeanDefinition、BeanFactory、Bean对象
+
+BeanFactory利用BeanDefinition来生成Bean对象；
+
+BeanDefinition相当于BeanFactory用来生成Bean的原料；
+
+Bean相当于BeanFactory利用BeanDefinition生产的产品。
+
+### $$$$$$$Bean生命周期
+
+Bean生命周期，描述Spring一个Bean的创建过程和销毁过程所经历的步骤；
+
+可根据Bean生命周期机制，对Bean实现自定义加工。
+
+**Bean的创建过程是重点。**
+
+步骤：
+
+1. BeanDefinition创建：Bean定义
+2. 构造方法推断：选出构造方法
+3. 实例化：构造方法反射得到对象
+4. 属性填充：
+5. 初始化：
+6. 初始化后：AOP、生成代理对象；
+7. 销毁：
 
 ### 5、BeanFactory与ApplicationContext的区别？
 
