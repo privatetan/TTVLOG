@@ -137,3 +137,11 @@ java对象：java实体实例
 
 自动装配：
 
+
+
+## Spring事务失效场景
+
+1. ###### 抛出非RuntimeException或Error的异常，即抛出Checked Exception时失误失效；
+
+   - Checked Exception：IOException，SQLException，ClassNotFoundException；
+   - 解决：1. 捕获Checked Exception并自定义抛出RuntimeException或Error。2.@Transactional(rollbackFor = Exception.class)
