@@ -10,23 +10,23 @@ SpringBoot是 Spring 开源组织下的子项目；
 
 ## SpringBoot有哪些优点?
 
-- ###### 减少开发，测试时间。
+- ##### 减少开发，测试时间。
 
-- ###### 使用JavaConfig有助于避免使用XML。
+- ##### 使用JavaConfig有助于避免使用XML。
 
-- ###### 避免大量的Maven导入和各种版本冲突；
+- ##### 避免大量的Maven导入和各种版本冲突；
 
-- ###### 没有单独的Web服务器需要。
+- ##### 没有单独的Web服务器需要。
 
   不需要启动Tomcat，Jetty或其他任何服务器容器。
 
-- ###### 需要更少的配置，因为没有web.xml文件。
+- ##### 需要更少的配置，因为没有web.xml文件。
 
   只需添加用@Configuration注释的类，然后添加用@Bean注释的方法，Spring将自动加载对象并像以前一样对其进行管理。甚至可以将@Autowired添加到bean方法中，以使Spring自动装入需要的依赖关系中。
 
-- ###### 基于环境的配置。
+- ##### 基于环境的配置。
 
-  使用“-Dspring.profiles.active = {enviornment}”这个属性，可以将正在使用的环境传递到应用程序，在加载主应用程序属性文件后，Spring将在 `(application{environment} .properties）`中加载后续的应用程序属性文件。
+  使用“-Dspring.profiles.active = {enviornment}”这个属性，可以将正在使用的环境传递到应用程序，在加载主应用程序属性文件后，Spring将在 “ (application{environment} .properties）“中加载后续的应用程序属性文件。
 
 
 
@@ -52,9 +52,11 @@ SpringBoot是 Spring 开源组织下的子项目；
 
 - ### yaml：结构化、分层配置的数据序列化语言
 
-      app: 
-        user: 
-          name: javastack
+  ```yaml
+  app: 
+    user: 
+      name: javastack
+  ```
 
 
 

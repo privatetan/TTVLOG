@@ -16,7 +16,7 @@ ThreadLocal类提供线程局部变量。
 
 - ###### 不支持线程间（包括子父线程）变量透传
 
-- ###### 高并发，性能不及Netty的FastLocalThread
+- ###### 高并发，但性能不及Netty的FastLocalThread
 
 - ###### 通过Thread类的ThreadLocalMap成员变量实现
 
@@ -26,9 +26,9 @@ ThreadLocalMap是Thread类中成员变量，每个Thread实例都维护一个Thr
 
 ThreadLocal的get()、set()、remove()方法的操作都是在ThreadLocalMap上完成的。
 
-ThreadLocalMap通过开放地址法实现：
+ThreadLocalMap通过**开放地址法**实现：
 
-- Key为ThreadLocal**，**Value**为**ThreadLocal中保存的变量，实现ThreadLocal内保存的值与线程绑定；
+- Key：ThreadLocal，Value：ThreadLocal中保存的变量，实现ThreadLocal内保存变量的值与线程绑定；
 
 - 开放地址法底层对应的数组为Entry数组，Entry类持有了ThreadLocal对象的弱引用（WeakReference），持有了ThreadLocal中保存变量的强引用，这导致了不恰当的使用ThreadLocal容易引发内存泄漏问题。
 
@@ -46,13 +46,13 @@ ThreadLocal.set()内部调用ThreadLocalMap.set()方法。
 
 #### ThreadLocalMap.remove()方法
 
-ThreadLocalMap.remove()方法以ThreadLocal**作为**Key采用开放寻址法将value与其所属线程绑定解除。
+ThreadLocalMap.remove()方法以ThreadLocal作为Key采用开放寻址法将value与其所属线程绑定解除。
 
-ThreadLocal.set()内部调用ThreadLocalMap.set()方法。
+ThreadLocal.remove()内部调用ThreadLocalMap.remove()方法。
 
 #### ThreadLocalMap.expungeStaleEntry()方法
 
-expungeStaleEntry()通过重新哈希，清理已被remove或被GC回收的ThreadLocal上关联的value；
+expungeStaleEntry()通过**重新哈希**，清理已被remove或被GC回收的ThreadLocal上关联的value；
 
 该方法可以保证由于只与Entry存在弱引用关系的ThreadLocal被GC回收后，Entry上的Value（与ThreadLocal上关联的value）能被及时清理，而不会因为Entry上的Value一直存在强引用最终导致的内存泄漏。
 

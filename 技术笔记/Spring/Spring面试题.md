@@ -65,14 +65,6 @@ Bean生命周期，描述Spring一个Bean的创建过程和销毁过程所经历
 
 步骤：
 
-1. BeanDefinition创建：Bean定义
-2. 构造方法推断：选出构造方法
-3. 实例化：构造方法反射得到对象
-4. 属性填充：
-5. 初始化：
-6. 初始化后：AOP、生成代理对象；
-7. 销毁：
-
 ### 5、BeanFactory与ApplicationContext的区别？
 
 
