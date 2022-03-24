@@ -40,7 +40,7 @@ Bean的生命周期： bean 被实例化时，需要执行一些初始化使它�
 
   4. 属性的赋值；
 
-     将PropertyValues容器中的属性键值对，赋值到beanWrapper中以实现属性赋值。
+     将PropertyValues容器中的属性键值对，赋值到BeanWrapper中以完成属性赋值。
 
 - ##### 初始化（Initialization）
 
