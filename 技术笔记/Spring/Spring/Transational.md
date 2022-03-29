@@ -39,13 +39,17 @@
 
 
 
-### 2.事务管理器
+### 2.事务管理器（TransactionalManager）
+
+
+
+### 3.事务拦截器（TransactionInterceptor）
 
 
 
 
 
-### 3.@Transactional
+### 4.@Transactional
 
 Spring定义
 
@@ -106,23 +110,25 @@ public @interface Transactional {
 
 #### @Transactional注意事项
 
-1. 1
-2. 2
-3. 3
-4. 4
-5. 5
-6. 6
-7. 7
+1. @Transactional 只作用于public方法，对于非public方法事务会失效；
+2. @Transactional 可应用于接口、接口方法、类、类方法上，但是建议在具体的类或方法上使用，而不要使用在类所要实现的任何接口上，
+3. @Transactional 默认遇到运行期异常(RuntimeException)、错误（Error）回滚，遇到检查异常（checked）不回滚。可通过注解属性设置回滚生效/失效异常。
+4. 避免同一个类中调用 `@Transactional` 注解的方法，这样会导致事务失效；
+5. 正确的设置 `@Transactional` 的 `rollbackFor` 和 `propagation` 属性，否则事务可能会回滚失败;
+6. 被 `@Transactional` 注解的方法所在的类必须被 Spring 管理，否则不生效；
+7. 底层使用的数据库必须支持事务机制，否则不生效；
 
 
 
-### 4.TransactionDefinition
+### 5.TransactionDefinition
 
 事务属性类，定义了事务的隔离级别、传播行为、超时时间、只读事务等
 
 ```java
 public interface TransactionDefinition {
-
+   /**
+    * 传播行为
+    */
    int PROPAGATION_REQUIRED = 0;
 
    int PROPAGATION_SUPPORTS = 1;
@@ -136,7 +142,10 @@ public interface TransactionDefinition {
    int PROPAGATION_NEVER = 5;
 
    int PROPAGATION_NESTED = 6;
-
+   
+   /**
+    * 隔离级别
+    */
    int ISOLATION_DEFAULT = -1;
 
    int ISOLATION_READ_UNCOMMITTED = 1;  // same as java.sql.Connection.TRANSACTION_READ_UNCOMMITTED;
@@ -146,7 +155,7 @@ public interface TransactionDefinition {
    int ISOLATION_REPEATABLE_READ = 4;  // same as java.sql.Connection.TRANSACTION_REPEATABLE_READ;
 
    int ISOLATION_SERIALIZABLE = 8;  // same as java.sql.Connection.TRANSACTION_SERIALIZABLE;
-
+   
    int TIMEOUT_DEFAULT = -1;
 
    default int getPropagationBehavior() {
@@ -179,7 +188,7 @@ public interface TransactionDefinition {
 
 
 
-### 5.事务传播行为
+### 6.事务传播行为
 
 事务传播行为（propagation behavior）：指的就是当一个事务方法被另一个事务方法调用时，这个事务方法应该如何进行。
 
@@ -239,30 +248,51 @@ REQUIRED、REQUIRES_NEW与NESTED有相同功能，单独调用B时，B开启新�
 
 
 
-### 6.事务隔离级别
+### 7.事务隔离级别
+
+#### Isolation枚举类
+
+```java
+public enum Isolation {
+   //使用数据库默认的隔离级别
+   DEFAULT(TransactionDefinition.ISOLATION_DEFAULT),
+   //未提交读
+   READ_UNCOMMITTED(TransactionDefinition.ISOLATION_READ_UNCOMMITTED),
+   //已提交读
+   READ_COMMITTED(TransactionDefinition.ISOLATION_READ_COMMITTED),
+   //可重复读
+   REPEATABLE_READ(TransactionDefinition.ISOLATION_REPEATABLE_READ),
+   //序列化
+   SERIALIZABLE(TransactionDefinition.ISOLATION_SERIALIZABLE);
+
+   private final int value;
+
+   Isolation(int value) {
+      this.value = value;
+   }
+
+   public int value() {
+      return this.value;
+   }
+}
+```
 
 
 
-### 7.事务超时属性
+## 三、@Transactional事务实现原理
+
+@Transactional的工作机制是基于 AOP 实现的，AOP 又是使用动态代理实现的。
+
+如果目标对象实现了接口，默认情况下会采用 JDK 的动态代理；如果目标对象没有实现了接口，会使用 CGLIB 动态代理。
 
 
 
-### 8.事务只读属性
+
+
+## 四、Spring Transactional存在问题
+
+### 事务失效
 
 
 
-### 9.事务回滚规则
-
-
-
-### 实现原理
-
-
-
-## Spring Transactional存在问题
-
-#### 事务失效
-
-
-
-#### 多线程事务
+### 多线程事务
