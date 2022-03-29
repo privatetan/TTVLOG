@@ -1,6 +1,6 @@
 # Transactional
 
-## Transactional
+## 一、Transactional
 
 事务：逻辑中的一组操作，要么全部成功，要么全部失败。
 
@@ -20,25 +20,32 @@
 
 
 
-## Spring事务
+## 二、Spring事务
 
-### 实现方式
+### 1.实现方式
 
 - **编程式事务**
 
-  通过  TransactionTemplate 或者 TransactionManager 手动管理事务。
+  1. TransactionTemplate 手动管理事务；
+  2. TransactionManager 手动管理事务。
 
 - **声明式事务**
 
-  1. 基于AspectJ，使用< tx> 和< aop>标签实现；
+  1. 基于 AspectJ，使用< tx> 和< aop>标签实现；
   2. 基于 @Transactional 注解实现；
-  3. 基于 TransactionInterceptor实现；
-  4. 基于 TransactionProxyFactoryBean实现。
+  3. 基于 TransactionInterceptor 拦截器实现；
+  4. 基于 TransactionProxyFactoryBean 代理Bean实现。
 
 
 
 
-### @Transactional
+### 2.事务管理器
+
+
+
+
+
+### 3.@Transactional
 
 Spring定义
 
@@ -49,9 +56,10 @@ Spring定义
 @Documented
 public @interface Transactional {
    
+   //指定事务管理器
    @AliasFor("transactionManager")
    String value() default "";
-
+   //指定事务管理器
    @AliasFor("value")
    String transactionManager() default "";
 
@@ -108,7 +116,7 @@ public @interface Transactional {
 
 
 
-## TransactionDefinition
+### 4.TransactionDefinition
 
 事务属性类，定义了事务的隔离级别、传播行为、超时时间、只读事务等
 
@@ -169,23 +177,81 @@ public interface TransactionDefinition {
 }
 ```
 
-### 事务传播行为
+
+
+### 5.事务传播行为
+
+事务传播行为（propagation behavior）：指的就是当一个事务方法被另一个事务方法调用时，这个事务方法应该如何进行。
+
+#### Propagation枚举类
+
+以methodA()、methodB()举例。
+
+```java
+public enum Propagation {
+  
+  //默认事务传播行为；A存在事务，B加入A事务；单独调用B，B开启新事务
+	REQUIRED(TransactionDefinition.PROPAGATION_REQUIRED),
+
+  //A存在事务，B执行A事务；单独调用B，B以非事务状态执行
+	SUPPORTS(TransactionDefinition.PROPAGATION_SUPPORTS),
+
+  //A存在事务，B执行A事务；单独调用B，B抛出异常
+	MANDATORY(TransactionDefinition.PROPAGATION_MANDATORY),
+
+  //A存在事务，B挂起A事务并新开事务；单独执行B时，B开启新事务；AB事务互不干扰
+  //需要使用JAT事务管理器TransactionManager作为事务管理器
+	REQUIRES_NEW(TransactionDefinition.PROPAGATION_REQUIRES_NEW),
+
+  //A存在事务，B挂起A事务并以非事务执行；单独执行B时，B以非事务执行
+  //需要使用JAT事务管理器TransactionManager作为事务管理器
+	NOT_SUPPORTED(TransactionDefinition.PROPAGATION_NOT_SUPPORTED),
+ 
+  //B总是非事务地执行，如果存在一个活动事务，则抛出异常
+	NEVER(TransactionDefinition.PROPAGATION_NEVER),
+
+  //A存在事务，B运行在A的嵌套事务中；单独调用B, B开启新事务
+  //重点：保存A事务的savePoint，嵌套事务中的B失败时，回滚至savePoint，A事务提交/回滚B事务也会提交/回滚
+	NESTED(TransactionDefinition.PROPAGATION_NESTED);
+
+	private final int value;
+
+	Propagation(int value) {
+		this.value = value;
+	}
+
+	public int value() {
+		return this.value;
+	}
+
+}
+```
+
+#### REQUIRES_NEW 与 NESTED
+
+REQUIRED、REQUIRES_NEW与NESTED有相同功能，单独调用B时，B开启新的事务；
+
+区别在于：
+
+- REQUIRED：A、B事务相关联，互相影响；
+- REQUIRES_NEW：A、B的事务完全独立，互不影响；
+- NESTED：B的事务是A的事务的嵌套事务，即，保留A事务的savePoint，B失败，回滚至savePoint，A事务提交/回滚B事务也会提交/回滚。
 
 
 
-### 事务隔离级别
+### 6.事务隔离级别
 
 
 
-### 事务超时属性
+### 7.事务超时属性
 
 
 
-### 事务只读属性
+### 8.事务只读属性
 
 
 
-### 事务回滚规则
+### 9.事务回滚规则
 
 
 
