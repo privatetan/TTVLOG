@@ -15,3 +15,18 @@ git remote add origin https://xxx.com/aaa.git
 4. ##### 解决git push 发生HTTP2.0错误
 
 git config --global http.version HTTP/1.1
+
+5. ##### 设置/取消代理
+
+设置：
+
+git config --global http.proxy 'socks5://127.0.0.1:7890'     //7890是代理端口
+
+git config --global https.proxy 'socks5://127.0.0.1:7890'   
+
+取消：
+
+git config --global --unset http.proxy
+
+git config --global --unset https.proxy
+
