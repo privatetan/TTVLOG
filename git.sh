@@ -8,7 +8,7 @@ if [ -n "$msg" ]; then
 	git pull
 	echo "完成add、commit pull操作"
         git push
-	echo "完成pull操作"
+	echo "完成push操作"
 else
 	echo "请添加注释再来一遍"
 fi
