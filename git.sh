@@ -2,7 +2,7 @@
 
 msg=$1
 if [ -n "$msg" ]; then
-	cd /Users/privatetan/Develop/TTVLOG
+	cd /Users/privatetan/Documents/TTVLOG
 	git add . 
 	git commit -m "$msg"
 	git pull
