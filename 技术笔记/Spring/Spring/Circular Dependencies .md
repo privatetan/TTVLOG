@@ -80,3 +80,52 @@ Error creating bean with name 'xxx': Requested bean is currently in creation: Is
 
 ## 三级缓存解决 Circular Dependencies
 
+Spring的三级缓存，解决循环依赖的关键就是：**提前暴露**
+
+三级缓存：
+
+```java
+public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements SingletonBeanRegistry {
+
+	/** Cache of singleton objects: bean name to bean instance. */
+	private final Map<String, Object> singletonObjects = new ConcurrentHashMap<>(256);
+
+	/** Cache of singleton factories: bean name to ObjectFactory. */
+	private final Map<String, ObjectFactory<?>> singletonFactories = new HashMap<>(16);
+
+	/** Cache of early singleton objects: bean name to bean instance. */
+	private final Map<String, Object> earlySingletonObjects = new ConcurrentHashMap<>(16);
+
+  /** Set of registered singletons, containing the bean names in registration order. */
+	private final Set<String> registeredSingletons = new LinkedHashSet<>(256);
+}
+```
+
+- 一级缓存：**singletonObjects**，存放完整的 Bean。
+- 二级缓存：**earlySingletonObjects**，存放提前暴露的Bean，Bean 是不完整的，未完成属性注入和执行 init 方法。
+- 三级缓存：**singletonFactories**，存放的是 Bean 工厂，主要是生产 Bean，然后将Bean存放到二级缓存中。与AOP 有关。
+
+##### 存入三级缓存：
+
+在实例化Bean（`AbstractAutowireCapableBeanFactory::doBean`）时，判断是否允许提前暴露对象，如果允许，则直接添加一个 ObjectFactory 到三级缓存；
+
+```java
+public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements SingletonBeanRegistry {
+   
+    protected void addSingletonFactory(String beanName, ObjectFactory<?> singletonFactory) {
+      Assert.notNull(singletonFactory, "Singleton factory must not be null");
+      synchronized (this.singletonObjects) {
+         //如果一级缓存中储存在该实例
+        if (!this.singletonObjects.containsKey(beanName)) {
+          //添加至三级缓存
+          this.singletonFactories.put(beanName, singletonFactory);
+          //移除二级缓存中的实例，确保二级缓存中没有该实例
+          this.earlySingletonObjects.remove(beanName);
+          
+          this.registeredSingletons.add(beanName);
+        }
+      }
+    }
+}
+```
+
