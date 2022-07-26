@@ -6,7 +6,7 @@
 
 DI（依赖注入）是对IOC（控制反转）Bean的使用。
 
-注入方式有：
+Spring注入方式有：
 
 - ##### 构造器注入（Constructor Injection）【推荐】
 
@@ -32,7 +32,7 @@ DI（依赖注入）是对IOC（控制反转）Bean的使用。
   }
   ```
 
-- ##### 接口注入 （Interface Injection）
+- ##### Field注入 （Field Injection）
 
   ```java
   class UserApi{
