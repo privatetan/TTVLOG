@@ -109,6 +109,12 @@ nodejs的模块和包机制的实现参照了CommonJS标准，但并未完全遵
 
 模块，是nodejs应用基本组成，文件和模块一一对应：一个nodejs文件就是一个模块。
 
+查看js文件的模块信息
+
+```javascript
+console.log(module);  #显示当前文件的模块信息
+```
+
 ###### 创建模块
 
 exports：公开模块接口

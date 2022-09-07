@@ -16,10 +16,13 @@ npm install express utility --save  # 安装依赖 express、utility 并自动�
 
 ## 工具
 
-```
+```shell
 express
 utility
 eventproxy
 superagent
 cheerio
+fs  #文件管理
+path #处理路径
+http #已废弃，推荐使用axios
 ```
