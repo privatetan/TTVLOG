@@ -25,4 +25,5 @@ cheerio
 fs  #文件管理
 path #处理路径
 http #已废弃，推荐使用axios
+nrm 
 ```

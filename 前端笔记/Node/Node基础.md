@@ -107,6 +107,14 @@ nodejs的模块和包机制的实现参照了CommonJS标准，但并未完全遵
 
 ### 模块（Module）
 
+##### 模块分类
+
+- ##### 内置模块
+
+- ##### 自定义模块
+
+- ##### 第三方模块（包）
+
 模块，是nodejs应用基本组成，文件和模块一一对应：一个nodejs文件就是一个模块。
 
 查看js文件的模块信息
@@ -115,13 +123,43 @@ nodejs的模块和包机制的实现参照了CommonJS标准，但并未完全遵
 console.log(module);  #显示当前文件的模块信息
 ```
 
-###### 创建模块
+##### 创建模块
 
-exports：公开模块接口
+exports：公开模块接口 
 
-###### 获取模块
+注意：默认下，exports指向的是module.exports指向对象，require()结果永远是module.exports指向对象。
+
+##### 获取模块
 
 require：获取模块接口
+
+注意：requrie获取的永远是module.exports指向对象
+
+##### 模块的加载机制
+
+1. **模块优先从缓存中加载**：模块在第一次加载后就会被缓存，即多次require()不会导致模块代码的重复执行。
+
+2. ##### 内置模块加载优先级最高
+
+3. ##### 加载自定义模块时，须以`./`或者`../`开头的路径名。
+
+4. ##### require()加载自定义模块时未指定文件扩展名的加载顺序：
+
+   - 按确切文件名
+   - 补全`.js`
+   - 补全`.json`
+   - 补全`.node`
+   - 加载失败，报错
+
+5. ##### 在内置模块、自定义模块找不到时，会尝试从父目录开始到磁盘根目录，在`/node_modules`文件夹加载第三方模块。
+
+6. `require(‘目录’)`时，有三种加载方式：
+
+   - 在被加载目录下查找`package.json`文件，并以`main`属性，作为加载入口；
+   - 如果`package.json`文件不存在，或者`main`属性不存在时，则试图加载目录下`index.js`文件；
+   - 如果都找不到，则报错。
+
+   
 
 ### 包（Package）
 
@@ -131,26 +169,60 @@ require：获取模块接口
 
 包将某个独立的功能封装起来，用于发布、更新、依赖管理和版本控制。
 
-###### 文件夹的模块
+##### 文件夹的模块
 
 最简单的包，就是一个作为文件夹的模块。
 
-###### package.json
+##### package.json
 
 package.json 位于模块的目录下，用于定义包的属性。
 
-###### package.json 属性说明
+##### package.json 属性说明
 
-- name - 包名。
-- version - 包的版本号。
+- **name - 包名。**
+- **version - 包的版本号。**
 - description - 包的描述。
 - homepage - 包的官网 url 。
 - author - 包的作者姓名。
 - contributors - 包的其他贡献者姓名。
 - dependencies - 依赖包列表。如果依赖包没有安装，npm 会自动将依赖包安装在 node_module 目录下。
-- repository - 包代码存放的地方的类型，可以是 git 或 svn，git 可在 Github 上。
-- main - main 字段指定了程序的主入口文件，require('moduleName') 就会加载这个文件。这个字段的默认值是模块根目录下面的 index.js。
+- repository - 包代码存放的地方的类型，可以是 `git` 或` svn`，`git `可在 Github 上。
+- **main - main 字段指定了程序的主入口文件**，`require('moduleName')` 就会加载这个文件。这个字段的默认值是模块根目录下面的 `index.js`。
 - keywords - 关键字。
+
+##### 规范的包需满足三个条件
+
+1. 包必须以单独的目录存在；
+2. 包的顶级目录须有`package.json`包配置文件；
+3. `package.json`文件中必须包含`name`、`version`、`main`三个属性。
+
+##### 开发包
+
+1. 新建包目录：`node-tools`
+2. 在包目录下新建三个文件：
+   - `package.json`：包配置文件
+   - `index.js`：包的入口文件，require()导入包时，默认加载该文件
+   - `README.md`：包说明文档
+
+##### 发布包
+
+1. 注册npm账户
+2. 终端登录npm账户（npm官方地址）
+3. `npm publish` 命令发布
+
+##### 删除发布的包
+
+```shell
+npm unpublish 包名 --force
+```
+
+注意：
+
+1. 只能删除72小时内发布的包
+2. 删除的包，24小时内不能再次发布
+3. 发布包时需慎重
+
+
 
 ## Node包管理器-npm
 
