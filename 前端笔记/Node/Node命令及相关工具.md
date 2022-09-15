@@ -26,4 +26,6 @@ fs  #文件管理
 path #处理路径
 http #已废弃，推荐使用axios
 nrm 
+nodemon #代码热部署（全局安装），使用nodemon x.js 来代替node x.js 启动项目
 ```
+
