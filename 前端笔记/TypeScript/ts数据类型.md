@@ -124,3 +124,65 @@ nullValue = undefined; //Type 'undefined' is not assignable to type 'null'.
 var person = null;
 ```
 
+`typeof`检测`null`是`object`类型
+
+```typescript
+console.log(typeof null);  //输出 object
+```
+
+### undefined
+
+定义：`undefined`
+
+表示一个没有设值的变量
+
+```typescript
+var undefinedValue:undefined;
+console.log(undefinedValue);  //输出 undefined
+```
+
+可以使用`undefined`来清空对象
+
+```typescript
+var person = undefined;
+```
+
+`typeof`检测`undefined`变量会返回`undefined`
+
+```typescript
+var undefinedValue:undefined;
+console.log(typeof undefinedValue);
+```
+
+### never
+
+定义：`never`
+
+其它类型（包括 null 和 undefined）的子类型，代表从不会出现的值，
+
+**变量**：声明为 never 类型的变量只能被 never 类型所赋值；
+
+```typescript
+let x: never;
+let y: number;
+
+x = 123; // 编译错误，数字类型不能转为 never 类型
+
+x = (()=>{ throw new Error('exception')})(); // 运行正确，never 类型可以赋值给 never类型
+
+y = (()=>{ throw new Error('exception')})(); // 运行正确，never 类型可以赋值给 数字类型
+```
+
+**函数**：通常表现为抛出异常或无法执行到终止点（例如无限循环）。
+
+```typescript
+// 返回值为 never 的函数可以是抛出异常的情况
+function error(message: string): never {
+    throw new Error(message);
+}
+
+// 返回值为 never 的函数可以是无法被执行到的终止点的情况
+function loop(): never {
+    while (true) {}
+}
+```
