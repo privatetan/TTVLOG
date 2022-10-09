@@ -18,6 +18,17 @@
 
    npm，是nodejs官方提供的第三方包管理工具
 
+   Npm config:
+
+   ```shell
+   home = "https://npm.taobao.org" 
+   https-proxy = "http://127.0.0.1:7890" 
+   proxy = "http://127.0.0.1:7890" 
+   registry = "https://registry.npmjs.org/" 
+   ```
+
+   
+
 4. ###### Node多版本管理器：nvm
 
    nvm，是nodejs社区开发的多版本管理器，用于维护多个版本的nodejs实例；

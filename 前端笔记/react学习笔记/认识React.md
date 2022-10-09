@@ -8,11 +8,17 @@
 
 2. 创建项目
 
+   ```shell
    $npx create-react-app my-app
+   ```
 
 3. 启动项目
 
+   ```shell
    $npm start
+   ```
+
+
 
 ## 认识React
 
@@ -29,3 +35,7 @@ JSX语法：
 数据不可变性：
 
 函数式组件：
+
+
+
+## 组件
