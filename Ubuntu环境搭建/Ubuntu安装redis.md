@@ -42,7 +42,7 @@ sudo vim /etc/redis/redis.conf
 
 2、重新启动Redis服务以使更改生效
 
-```shell
+```
 sudo systemctl restart redis-server
 ```
 
